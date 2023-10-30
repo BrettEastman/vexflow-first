@@ -1,95 +1,55 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { Vex } from "vexflow";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+  const containerRef = useRef(null);
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+  useEffect(() => {
+    const { Accidental, Renderer, Stave, StaveNote, Formatter, Voice } =
+      Vex.Flow;
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+    if (containerRef.current) {
+      const renderer = new Renderer(
+        containerRef.current,
+        Renderer.Backends.SVG
+      );
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+      // Configure the rendering context.
+      renderer.resize(500, 500);
+      const rendererContext = renderer.getContext();
+      rendererContext.setFont("Arial", 10);
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+      // Create a stave of width 400 at position 10, 40.
+      const stave = new Stave(10, 40, 400);
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      // Add a clef and time signature.
+      stave.addClef("treble").addTimeSignature("4/4");
+
+      // Connect it to the rendering context and draw!
+      stave.setContext(rendererContext).draw();
+
+      ////////////////////////
+
+      // Create the notes
+      const notes = [
+        new StaveNote({
+          keys: ["g/4", "b/4", "cb/5", "e/5", "g#/5", "b/5"],
+          duration: "h",
+        })
+          .addModifier(new Accidental("bb"), 0)
+          .addModifier(new Accidental("b"), 1)
+          .addModifier(new Accidental("#"), 2)
+          .addModifier(new Accidental("n"), 3)
+          .addModifier(new Accidental("b"), 4)
+          .addModifier(new Accidental("##"), 5),
+        new StaveNote({ keys: ["c/4"], duration: "h" }),
+      ];
+
+      // Helper function to justify and draw a 4/4 voice.
+      Formatter.FormatAndDraw(rendererContext, stave, notes);
+    }
+  }, []);
+
+  return <div ref={containerRef} />;
 }
