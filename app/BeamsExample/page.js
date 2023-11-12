@@ -1,6 +1,7 @@
 "use client";
 import { Vex } from "vexflow";
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 
 export default function Page1() {
   const containerRef = useRef(null);
@@ -8,6 +9,8 @@ export default function Page1() {
   useEffect(() => {
     const { Renderer, Stave, StaveNote, Accidental, Beam, Formatter, Dot } =
       Vex.Flow;
+
+    const contRefCurrent = containerRef.current;
 
     if (containerRef.current) {
       const renderer = new Renderer(
@@ -63,8 +66,20 @@ export default function Page1() {
         Dot.buildAndAttach([note]);
         return note;
       }
+
+      return () => {
+        contRefCurrent.innerHTML = "";
+      };
     }
   }, []);
 
-  return <div ref={containerRef}></div>;
+  return (
+    <div ref={containerRef}>
+      <div>
+        <Link href={"/"}>
+          <span>Back Home</span>
+        </Link>
+      </div>
+    </div>
+  );
 }

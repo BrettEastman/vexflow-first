@@ -1,6 +1,7 @@
 "use client";
 import { Vex } from "vexflow";
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 
 export default function Page2() {
   const containerRef = useRef(null);
@@ -8,6 +9,8 @@ export default function Page2() {
   useEffect(() => {
     const { Renderer, Stave, StaveNote, Accidental, Beam, Formatter, Dot } =
       Vex.Flow;
+
+    const contRefCurrent = containerRef.current;
 
     if (containerRef.current) {
       const renderer = new Renderer(
@@ -39,8 +42,21 @@ export default function Page2() {
 
       // Helper function to justify and draw a 4/4 voice.
       Formatter.FormatAndDraw(rendererContext, stave, notes);
+
+      // clean up function to remove the svg. Could possibly also handle this with an if statement?
+      return () => {
+        contRefCurrent.innerHTML = "";
+      };
     }
   }, []);
 
-  return <div ref={containerRef}></div>;
+  return (
+    <div ref={containerRef}>
+      <div>
+        <Link href={"/"}>
+          <span>Back Home</span>
+        </Link>
+      </div>
+    </div>
+  );
 }

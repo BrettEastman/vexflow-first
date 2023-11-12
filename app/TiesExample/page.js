@@ -1,6 +1,7 @@
 "use client";
 import { Vex } from "vexflow";
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 
 export default function TiesExample() {
   const containerRef = useRef(null);
@@ -16,6 +17,8 @@ export default function TiesExample() {
       Formatter,
       Dot,
     } = Vex.Flow;
+
+    const contRefCurrent = containerRef.current;
 
     if (containerRef.current) {
       const renderer = new Renderer(
@@ -103,8 +106,18 @@ export default function TiesExample() {
         Dot.buildAndAttach([note]);
         return note;
       }
+
+      return () => {
+        contRefCurrent.innerHTML = "";
+      };
     }
   }, []);
 
-  return <div ref={containerRef} />;
+  return (
+    <div ref={containerRef}>
+      <Link href={"/"}>
+        <span>Back Home</span>
+      </Link>
+    </div>
+  );
 }
