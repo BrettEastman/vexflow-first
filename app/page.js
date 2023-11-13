@@ -15,8 +15,8 @@ export default function Home() {
         </Link>
       </div>
       <div>
-        <Link href={"/ChordExample"}>
-          <span>Chord Example</span>
+        <Link href={"/SeventhChords"}>
+          <span>Identify Seventh Chords</span>
         </Link>
       </div>
       <div>
