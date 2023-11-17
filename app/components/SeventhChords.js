@@ -5,17 +5,17 @@ import Link from "next/link";
 
 export default function SeventhChords() {
   const containerRef = useRef(null);
+  const rendererRef = useRef();
 
   useEffect(() => {
     const { Renderer, Stave, StaveNote, Accidental, Formatter } = Vex.Flow;
 
     const contRefCurrent = containerRef.current;
 
-    if (containerRef.current) {
-      const renderer = new Renderer(
-        containerRef.current,
-        Renderer.Backends.SVG
-      );
+    if (contRefCurrent) {
+      rendererRef.current = new Renderer(contRefCurrent, Renderer.Backends.SVG);
+
+      const renderer = rendererRef.current;
 
       // Configure the rendering context.
       renderer.resize(1650, 200);
@@ -166,13 +166,5 @@ export default function SeventhChords() {
     }
   }, []);
 
-  return (
-    <div ref={containerRef}>
-      <div>
-        <Link href={"/"}>
-          <span>Back Home</span>
-        </Link>
-      </div>
-    </div>
-  );
+  return <div ref={containerRef} />;
 }

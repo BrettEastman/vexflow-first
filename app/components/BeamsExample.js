@@ -73,13 +73,5 @@ export default function Page1() {
     }
   }, []);
 
-  return (
-    <div ref={containerRef}>
-      <div>
-        <Link href={"/"}>
-          <span>Back Home</span>
-        </Link>
-      </div>
-    </div>
-  );
+  return <div ref={containerRef} />;
 }

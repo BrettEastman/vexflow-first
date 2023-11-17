@@ -113,11 +113,5 @@ export default function TiesExample() {
     }
   }, []);
 
-  return (
-    <div ref={containerRef}>
-      <Link href={"/"}>
-        <span>Back Home</span>
-      </Link>
-    </div>
-  );
+  return <div ref={containerRef} />;
 }
